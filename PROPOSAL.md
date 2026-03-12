@@ -1,215 +1,303 @@
-# SnapFit: AI Based Size Recommendation and Body Measurement Estimation System
+# SnapFit: AI-Based Size Recommendation and Body Measurement Estimation System
 
 ---
 
 ## 1. Project Title
 
-**SnapFit: AI Based Size Recommendation and Body Measurement Estimation System**
+**SnapFit: AI-Based Size Recommendation and Body Measurement Estimation System**
 
 ---
 
 ## 2. Project Overview
 
-Online clothing retail consistently experiences one of the highest product return rates across all e-commerce categories, largely attributed to size and fit mismatches between customers and purchased garments. This problem imposes significant financial, operational, logistical, and environmental costs on businesses and customers alike. Existing commercial solutions are often limited in scope, target specific demographics, and lack adaptive learning mechanisms, leaving a substantial gap for a more intelligent, inclusive, and generalizable fitting system.
+### 2.1 Problem Statement
 
-SnapFit extends an existing fully functional e-commerce clothing platform — built using React, Tailwind CSS, Node.js, and MongoDB — by integrating an AI-powered size recommendation module designed to measurably reduce size-based product returns. The system employs a hybrid architecture: the web frontend handles user interaction and real-time image preview, while a Python-based backend microservice performs body landmark detection, measurement extraction, body type classification, and intelligent size recommendation with fit confidence scoring.
+Online clothing retail suffers from one of the highest return rates among all e-commerce verticals, with size and fit mismatches being the leading cause. Customers cannot try on garments before purchase, and the size labels used by different brands are inconsistent and often unreliable. This results in significant financial losses for retailers, increased logistics costs, and environmental waste from unnecessary shipping cycles. Existing virtual fitting solutions are either prohibitively expensive, limited to specific body demographics, or require specialized hardware not available to mainstream consumers.
 
-The core intelligence layer maps user body measurements against product-specific size charts and predicts fitting outcomes (e.g., Tight, Perfect, or Loose) along with a confidence percentage. A feedback-driven learning loop collects post-purchase user feedback to continuously refine recommendation accuracy over time. User body profiles are persistently stored in a database, enabling personalized and progressively improving recommendations with each interaction.
+### 2.2 Proposed Solution
 
-The system is designed with generalizability, scalability, and privacy-consciousness as first-class properties. It is applicable to a broad range of clothing brands, body types, and regional demographics, and is architected for deployment on standard cloud or on-premises infrastructure, making it suitable for real-world adoption by small to mid-scale e-commerce clothing businesses.
+SnapFit is an AI-powered size recommendation module integrated into a fully functional e-commerce clothing platform. The system allows a customer to upload a single full-body photograph and provide their height. A Python-based AI microservice then extracts key body measurements from the image using pose estimation, classifies the user's body type, and compares the extracted measurements against the garment's size chart to recommend the best-fit size — along with a confidence score and a per-measurement fit breakdown (Tight / Perfect / Loose).
 
----
+The platform is built on an existing MERN-adjacent stack: React and Tailwind CSS on the frontend, Node.js and Express on the backend, and MongoDB for data persistence. The AI component runs as a separate Python microservice, keeping the two concerns cleanly decoupled. User body profiles are stored persistently, so returning customers receive instant recommendations without re-uploading. A post-purchase feedback loop collects real-world fit outcomes to support ongoing accuracy improvement.
 
-## 3. Project Goals and Objectives
+### 2.3 Significance
 
-### Goals
-
-1. To reduce size-based product returns in online clothing retail by providing AI-driven, accurate size recommendations to customers prior to purchase.
-2. To build a scalable, intelligent fitting system that continuously improves its recommendation accuracy through user feedback and data-driven refinement.
-3. To develop a size recommendation engine that generalizes across diverse body types, clothing brands, and regional sizing standards.
-
-### Objectives
-
-1. Develop a Python-based AI microservice that extracts key body measurements (including shoulder width, chest circumference, waist circumference, hip width, and torso length) from a single user-uploaded image, achieving an accuracy within an acceptable tolerance compared to manual measurements.
-2. Implement a body type classification module that categorizes users into standard body shape categories (such as Hourglass, Pear, Rectangle, Inverted Triangle, and Oval) with a classification accuracy of 80% or above.
-3. Build a size recommendation engine that maps extracted measurements against brand-specific or product-specific size charts and returns the best-fit size with a fit confidence score, achieving a correct size prediction rate of at least 80% in user validation testing.
-4. Integrate fit prediction output (Tight / Perfect / Loose) with per-measurement breakdown displayed on the frontend within a response time of under 3 seconds.
-5. Design and implement a feedback collection system that stores post-purchase fit feedback linked to the original recommendation, enabling periodic model refinement and accuracy improvement.
-6. Store and manage user body profiles, product size charts, and fit analytics persistently in a database, supporting a meaningful number of concurrent user profiles.
-7. Conduct a user validation study with a representative sample of test subjects to measure and report system accuracy, user satisfaction, and simulated return reduction percentage.
+SnapFit targets a measurable real-world outcome: a reduction in size-based product returns. It is designed to generalize across body types, brand-specific sizing standards, and garment categories, making it applicable beyond any single retailer. The system is privacy-first by design — body images are processed in memory and never stored; only numerical measurements are retained.
 
 ---
 
-## 4. High-Level System Components
+## 3. Goals and Objectives
 
-The system consists of five core functional units essential for fulfilling its primary mission of reducing size-based returns through intelligent size recommendation.
+### 3.1 Goals
 
-### 4.1 Image Upload and Preprocessing Unit
+1. Reduce size-based product returns by giving customers AI-driven size guidance before completing a purchase.
+2. Build a self-improving recommendation system that refines accuracy over time through post-purchase feedback.
+3. Deliver a generalized size engine that works across diverse body types, clothing brands, and regional sizing conventions.
 
-**Input:** Full-body user image captured via camera or uploaded from a device.
+### 3.2 Objectives
 
-**Process:** Validates image quality (lighting, angle, full body visibility), resizes and normalizes the image for AI processing, and securely transmits it to the backend microservice.
-
-**Output:** Preprocessed image ready for body landmark detection.
-
-**Stored Data:** Temporarily cached image, deleted after processing to preserve user privacy.
-
----
-
-### 4.2 Body Measurement Extraction Unit (AI Microservice)
-
-**Input:** Preprocessed user image and user-provided height (in a standard unit) as a scaling reference.
-
-**Process:** Uses a pose estimation model to detect body landmarks, calculates pixel distances between key landmark pairs (shoulders, hips, torso, and other relevant points), and converts pixel distances to real-world measurements using a height-based scaling factor.
-
-**Output:** Extracted body measurements — including shoulder width, estimated chest circumference, estimated waist circumference, hip width, and torso length.
-
-**Stored Data:** Extracted measurements saved to the user's body profile in the database.
+| # | Objective | Success Metric |
+|---|-----------|----------------|
+| O1 | Extract five key body measurements (shoulder width, chest, waist, hip, torso length) from a single front-facing image using a height reference | Mean Absolute Error within acceptable tolerance vs. tape measurements |
+| O2 | Classify users into standard body shape categories: Hourglass, Pear, Rectangle, Inverted Triangle, Oval | Classification accuracy ≥ 80% on validation set |
+| O3 | Recommend the correct garment size against a product-specific size chart, with fit confidence scoring | Correct size prediction rate ≥ 80% in user study |
+| O4 | Display fit prediction (Tight / Perfect / Loose) with per-measurement breakdown on the product page | End-to-end response time < 3 seconds |
+| O5 | Collect post-purchase fit feedback linked to the original recommendation record | Feedback data structured and stored for model refinement |
+| O6 | Persist user body profiles and recommendation history in a database | All profiles queryable; no re-upload required on return visits |
+| O7 | Conduct a user validation study with at least 20 test subjects | Report measurement MAE, size accuracy, user satisfaction (target ≥ 4/5) |
 
 ---
 
-### 4.3 Body Type Classification Unit
+## 4. Technology Stack
 
-**Input:** Extracted body measurements (shoulder, chest, waist, and hip ratios).
-
-**Process:** Applies ratio-based classification logic to categorize the user into one of several standard body shape categories (e.g., Hourglass, Pear, Rectangle, Inverted Triangle, Oval).
-
-**Output:** Body type label assigned to the user profile.
-
-**Stored Data:** Body type classification stored as part of the user body profile in the database.
-
----
-
-### 4.4 Size Recommendation and Fit Prediction Engine
-
-**Input:** User body measurements, body type, and the relevant product size chart from the database.
-
-**Process:** Compares user measurements against each available size in the product's size chart, calculates deviation scores per measurement, determines the best-fit size, generates a fit prediction label (Tight / Perfect / Loose) with a per-measurement breakdown, and computes an overall fit confidence percentage score.
-
-**Output:** Recommended size, fit prediction label, per-measurement fit breakdown, confidence score, and alternative size suggestions.
-
-**Stored Data:** Recommendation history (user, product, recommended size, confidence score) stored in the database for analytics and refinement.
+| Layer | Technology | Role |
+|---|---|---|
+| Frontend | React 18, Vite, Tailwind CSS, React Router v6 | User interface and routing |
+| Backend | Node.js, Express.js | REST API, business logic, AI proxy |
+| Database | MongoDB, Mongoose ODM | Data persistence |
+| Authentication | JWT (jsonwebtoken), bcryptjs | Secure session management |
+| Email | Nodemailer / Resend API | OTP delivery, order notifications |
+| AI Microservice | Python 3.10–3.12, FastAPI | Body measurement extraction, recommendation |
+| Pose Estimation | MediaPipe Pose (pre-trained) | Body landmark detection from image |
+| Numerical Computing | NumPy, SciPy | Pixel-to-cm conversion, ratio calculations |
+| Charts & Analytics | Recharts | Admin dashboard visualisations |
+| Containerisation | Docker, Docker Compose | Reproducible deployment across environments |
 
 ---
 
-### 4.5 Product Size Chart Management Unit
+## 5. System Architecture
 
-**Input:** Garment measurements entered by administrators or sellers (chest, waist, hip, length per size per product).
+SnapFit uses a three-tier architecture with four independently deployable services:
 
-**Process:** Stores and manages structured size chart data linked to individual products, supports multiple brands with varying size standards, and allows garment type tagging (e.g., slim-fit, regular, loose).
+```
+Browser (React)
+    │
+    ▼
+Node.js / Express  ──────────►  Python FastAPI (AI Microservice)
+    │                               • Pose landmark detection
+    │                               • Measurement extraction
+    ▼                               • Body type classification
+MongoDB                             • Recommendation engine
+  • users
+  • products (+ size charts)
+  • orders
+  • bodyprofiles        ◄── measurements saved by Node.js after AI call
+  • sizerecommendations
+  • fitfeedbacks
+```
 
-**Output:** Structured size chart data accessible by the recommendation engine during prediction.
-
-**Stored Data:** Product size charts persistently stored in the database, linked to the product catalog.
-
----
-
-### 4.6 User Body Profile Management Unit
-
-**Input:** AI-extracted measurements, body type classification, and user-provided attributes (height, weight).
-
-**Process:** Creates and maintains a persistent body profile for each registered user, updates measurements when a new image is analyzed, and serves stored profiles for future recommendations without requiring re-upload.
-
-**Output:** Complete user body profile available for instant size recommendations across all products.
-
-**Stored Data:** User body metrics, body type, measurement history, and linked recommendation records in the database.
-
----
-
-## 5. Optional Functional Units
-
-The following functional units enhance system quality and capability but are not essential for the core mission. Their development is subject to available time, expertise, and resources.
-
-### 5.1 Post-Purchase Feedback and Model Refinement Loop
-
-**Description:** Collects user feedback after product delivery (e.g., "Too tight in chest," "Perfect fit," "Loose in waist") and links it to the original recommendation record. Accumulated feedback data is used to periodically adjust measurement estimation biases and recommendation weights.
-
-**Condition:** Requires a sufficient user base to generate meaningful feedback volume for model refinement.
+The Node.js backend acts as the only consumer of the Python AI service. The frontend never calls the AI service directly, which keeps the AI endpoint internal and prevents abuse.
 
 ---
 
-### 5.2 Seller Return Analytics Dashboard
+## 6. Core Functional Units
 
-**Description:** Provides sellers and administrators with analytics on return rates per product, size chart accuracy scores, customer body type distribution, and AI-driven suggestions for size chart adjustments.
+### 6.1 Image Upload and Preprocessing
 
-**Condition:** Dependent on availability of sufficient transaction and return data. Full value is realized only in a production environment with real orders.
+**Input:** Full-body front-facing photo uploaded or captured via browser camera.
 
----
+**Process:** The frontend validates that a file is selected and that a height value is provided. The image is sent as multipart form data to Node.js, which forwards it to the Python microservice. The microservice resizes and normalises the image before landmark detection.
 
-### 5.3 Real-Time Frontend Pose Preview
+**Output:** Preprocessed image ready for pose estimation.
 
-**Description:** Displays a real-time body landmark overlay on the user's camera feed before image capture, guiding the user to position correctly for optimal measurement accuracy.
-
-**Condition:** Dependent on device camera quality and browser support for the chosen frontend pose estimation SDK.
+**Privacy:** The image is held in memory only during processing and is never written to disk or stored in the database.
 
 ---
 
-### 5.4 Asynchronous Processing and Queue Management
+### 6.2 Body Measurement Extraction (AI Microservice)
 
-**Description:** Implements job queuing for image processing requests to handle high concurrent user loads efficiently, with support for accelerated inference where applicable.
+**Input:** Full-body image bytes and user-provided height in centimetres.
 
-**Condition:** Not necessary for demonstration or moderate user loads but beneficial for production-scale deployment.
+**Process:**
+1. Run MediaPipe Pose to detect 33 body landmarks (pixel coordinates).
+2. Compute pixel distances between key landmark pairs: left-to-right shoulder, left-to-right hip, shoulder midpoint to hip midpoint (torso).
+3. Derive a pixel-per-centimetre scale factor using the ratio of pixel height (nose to ankle midpoint) to the provided height in cm.
+4. Apply scale factor to landmark distances to obtain shoulder width and hip width in cm.
+5. Estimate chest circumference and waist circumference using empirically derived regression ratios from width measurements (known limitation: single 2D image).
 
----
+**Output:** `{ shoulder_cm, chest_cm, waist_cm, hip_cm, torso_length_cm }`
 
-### 5.5 Containerization and Cloud Deployment
-
-**Description:** Containerizes all system components (frontend, backend, AI microservice, database) using container orchestration tools for consistent deployment across environments, with optional cloud hosting.
-
-**Condition:** Time-dependent. Local deployment is sufficient for demonstration; cloud deployment adds professional and commercial value if time permits.
-
----
-
-## 6. Assumptions
-
-- Users will upload a clear, full-body front-facing image wearing reasonably fitted clothing; accuracy may degrade with very baggy or heavily layered clothing.
-- Users will provide their accurate height, which serves as the primary scaling reference for all measurement conversions.
-- The pre-trained pose estimation model provides sufficiently accurate 2D landmark detection for the scope of this project without requiring custom model training from scratch.
-- Product size charts will be manually entered by administrators; automated extraction or scraping of size charts is not assumed.
-- A representative sample of test subjects will be available for the user validation study.
+**Stored:** Measurements saved to the user's `bodyprofile` document in MongoDB.
 
 ---
 
-## 7. Known Limitations and Risk Mitigations
+### 6.3 Body Type Classification
 
-**Single 2D Image Depth Limitation:** Estimating circumference measurements (chest, waist) from a single front-facing 2D image introduces inherent inaccuracy. Mitigation involves using regression-based estimation from width measurements, but this remains a known and documented limitation.
+**Input:** Extracted shoulder, chest, waist, and hip measurements.
 
-**Dataset Availability:** Publicly available labeled body measurement datasets may not cover all target demographics or garment types. A self-collected or augmented dataset will be used, which may limit generalizability; this will be clearly documented in the final evaluation.
+**Process:** Ratio-based rules classify the user into one of five standard categories:
 
-**Privacy Sensitivity:** Processing body images raises privacy concerns. The system must ensure images are processed and immediately deleted after measurement extraction, with only numerical measurements retained and stored.
+| Body Type | Primary Rule |
+|---|---|
+| Hourglass | Shoulder ≈ Hip (≤ 5 cm difference) AND Waist/Hip < 0.75 |
+| Pear | Hip > Shoulder + 5 cm |
+| Inverted Triangle | Shoulder > Hip + 5 cm |
+| Oval | Waist ≥ Shoulder OR Waist ≥ Hip |
+| Rectangle | None of the above |
 
----
-
-## 8. Exclusions
-
-The following items will not be developed or addressed at any point during this project due to time constraints, resource limitations, or scope boundaries.
-
-- **Virtual Try-On / Augmented Reality Clothing Overlay:** The system scope is limited to measurement-based size recommendation, not visual garment rendering or AR try-on experiences.
-- **Custom AI Model Training from Scratch:** The project will utilize pre-trained pose estimation models and regression-based estimation. Training a custom deep learning model from scratch is excluded due to computational and data requirements.
-- **Multi-Angle or 3D Body Scanning:** The system processes only a single front-facing 2D image. Multi-angle capture, depth sensor integration, or 3D body reconstruction are excluded.
-- **Automated Size Chart Extraction/Scraping:** Product size charts will be entered manually by administrators. Automated scraping or extraction from external sources is not within scope.
-- **Mobile Application Development:** The system will be developed and deployed as a responsive web application only. Native mobile applications are excluded.
-- **Live Payment Processing and Order Fulfillment:** The focus remains on the AI recommendation module. Live payment gateway integration and actual order fulfillment/shipping are excluded.
-- **Multi-Language and Localization Support:** The system interface and documentation will be in English only.
-- **Integration with External ERP or Inventory Systems:** The system operates as a standalone platform. Integration with third-party enterprise resource planning, warehouse management, or inventory systems is not included.
+**Output:** Body type label stored in the user's body profile.
 
 ---
 
-## 9. Gantt Chart
+### 6.4 Size Recommendation and Fit Prediction Engine
 
-**Work Breakdown Structure and Timeline (18 Months)**
+**Input:** User body measurements, and the target product's size chart array.
 
-**Project Duration:** March 2026 – August 2027  
+**Process:**
+1. For each available size in the chart, calculate the absolute deviation between the user's measurement and the chart value for each dimension (chest, waist, hip, shoulder).
+2. Apply weighted scores: chest (35 %), waist (30 %), hip (20 %), shoulder (15 %).
+3. Sum weighted deviations to produce a total score per size; select the size with the lowest score as the recommendation.
+4. Assign a per-measurement fit label: deviation within ±3 cm → Perfect; user value below chart → Tight; user value above chart + tolerance → Loose.
+5. Compute an overall confidence score (0–100 %) by mapping the best score against a maximum expected deviation.
+6. Return the next two lowest-scoring sizes as alternatives.
+
+**Output:** `{ recommended_size, fit_label, confidence_score, breakdown[], alternative_sizes[] }`
+
+**Stored:** Full recommendation record saved to `sizerecommendations` for analytics and feedback linking.
+
+---
+
+### 6.5 Product Size Chart Management
+
+**Input:** Garment measurements per size entered by an administrator (chest, waist, hip, shoulder, length in cm).
+
+**Process:** The admin product form includes a size chart editor grid. Each row is a size label (XS–XXL); each column is a measurement field. On save, the chart is embedded in the product document.
+
+**Output:** Structured size chart stored in the `products` collection and available to the recommendation engine at query time.
+
+---
+
+### 6.6 User Body Profile Management
+
+**Input:** AI-extracted measurements, body type, height, and optional weight from the user.
+
+**Process:** A `BodyProfile` document is created on first analysis and updated on every subsequent analysis. Stored profiles allow instant recommendations on return visits without re-uploading an image.
+
+**Output:** A persistent body profile linked to the user account, accessible across all products on the platform.
+
+---
+
+## 7. Optional Enhancements
+
+The following units are beneficial but non-essential. Development depends on available time and resources.
+
+### 7.1 Post-Purchase Feedback and Refinement Loop
+
+After order delivery, the customer is prompted to rate actual fit (Too Tight / Slightly Tight / Perfect / Slightly Loose / Too Loose) per measurement. Feedback records are linked to the original recommendation. Accumulated data informs periodic adjustment of the circumference estimation ratios and recommendation weights.
+
+**Condition:** Requires sufficient user volume to produce statistically meaningful correction signals.
+
+### 7.2 Admin Return Analytics Dashboard
+
+Provides administrators with per-product return-rate trends, size chart accuracy scores, and body-type distribution of the customer base. AI-generated alerts flag size charts whose recommendations are consistently wrong, prompting manual review.
+
+**Condition:** Requires real order and return data; most valuable in a production environment.
+
+### 7.3 Real-Time Pose Preview
+
+Displays a live body landmark overlay on the user's camera feed before image capture to guide correct positioning. Improves landmark detection reliability, particularly for users unfamiliar with full-body photography.
+
+**Condition:** Dependent on browser WebRTC support and device camera quality.
+
+### 7.4 Asynchronous Job Queue
+
+Queues image analysis requests during high concurrency to prevent timeouts. Supports GPU-accelerated inference nodes if available.
+
+**Condition:** Not required for demonstration or moderate loads; beneficial for production scale.
+
+### 7.5 Containerisation and Cloud Deployment
+
+All four services (frontend, Node.js backend, Python AI microservice, MongoDB) are packaged as Docker containers and orchestrated via Docker Compose. Optionally deployable to any cloud provider.
+
+**Condition:** Local deployment is sufficient for project demonstration. Cloud hosting adds commercial readiness.
+
+---
+
+## 8. Assumptions
+
+- Users upload a clear, full-body front-facing image with reasonably fitted clothing. Baggy or heavily layered garments will degrade measurement accuracy.
+- Users provide their accurate height in centimetres. Height is the only external scaling input; inaccurate height produces proportionally inaccurate measurements.
+- The pre-trained pose estimation model achieves sufficient 2D landmark detection accuracy for this use case without custom model training.
+- Product size charts are entered manually by platform administrators; automated extraction from external sources is not assumed.
+- A representative group of test subjects is available for the validation study.
+
+---
+
+## 9. Known Limitations and Mitigations
+
+**Circumference from a 2D Image:** Chest and waist circumferences cannot be directly measured from a single front-facing 2D image. The system estimates them from width measurements using empirical regression ratios. This is a known and documented inaccuracy that will be quantified in the evaluation.
+*Mitigation:* Clearly communicate measurement uncertainty to users; present fit ranges rather than absolute values.
+
+**Landmark Detection Failure:** Pose estimation may fail if the image is low resolution, the user is partially occluded, or lighting is poor.
+*Mitigation:* Validate image quality client-side and return a clear error message guiding the user to retake the photo.
+
+**Dataset Coverage:** Publicly available labeled body measurement datasets may not represent all target demographics or garment types.
+*Mitigation:* Supplement with a self-collected dataset of test subjects; clearly document demographic scope in the final report.
+
+**Privacy Risk from Body Images:** Storing raw body photographs creates significant privacy liability.
+*Mitigation:* Images are processed entirely in memory, never written to disk, and discarded immediately after measurement extraction. Only numerical values are persisted.
+
+---
+
+## 10. Exclusions
+
+The following are explicitly out of scope for this project:
+
+- **Virtual Try-On / AR Overlay** — scope is measurement-based recommendation only.
+- **Custom AI Model Training from Scratch** — pre-trained pose estimation models will be used as-is.
+- **Multi-Angle or 3D Body Scanning** — single front-facing 2D image only.
+- **Automated Size Chart Scraping** — size charts are entered manually by administrators.
+- **Native Mobile Application** — responsive web application only; no iOS or Android app.
+- **Live Payment Processing** — payment gateway integration and order fulfillment are excluded.
+- **Multi-Language Support** — English only.
+- **ERP or Inventory System Integration** — standalone platform; no third-party system integration.
+
+---
+
+## 11. Project Timeline
+
+**Duration:** 18 Months — March 2026 to August 2027  
 **Team:** Member 1 (M1), Member 2 (M2)
 
-| Phase | Task | Duration | Owner |
-|-------|------|----------|-------|
-| Phase 1: Planning & Setup | Requirements gathering, literature review, environment setup | Month 1–2 | M1, M2 |
-| Phase 2: Core Backend | E-commerce platform review, API design, database schema design | Month 2–3 | M1 |
-| Phase 3: AI Microservice | Pose estimation integration, measurement extraction, body type classification | Month 3–6 | M2 |
-| Phase 4: Recommendation Engine | Size chart management, fit prediction engine, confidence scoring | Month 5–8 | M1, M2 |
-| Phase 5: Frontend Integration | UI for image upload, recommendation display, fit breakdown view | Month 7–10 | M1 |
-| Phase 6: Feedback System | Post-purchase feedback collection, profile management, analytics | Month 9–12 | M2 |
-| Phase 7: Testing & Validation | Unit testing, integration testing, user validation study (20+ subjects) | Month 12–15 | M1, M2 |
-| Phase 8: Refinement & Deployment | Model refinement, performance optimization, deployment preparation | Month 15–17 | M1, M2 |
-| Phase 9: Documentation & Submission | Final report, presentation, documentation | Month 17–18 | M1, M2 |
+| Phase | Key Deliverables | Months | Owner |
+|-------|-----------------|--------|-------|
+| 1 — Planning & Setup | Requirements, literature review, environment setup, tech stack finalisation | 1–2 | M1, M2 |
+| 2 — E-Commerce Backend | REST API design, MongoDB schema, auth, product and order APIs | 2–3 | M1 |
+| 3 — AI Microservice | Pose estimation pipeline, measurement extraction, body type classifier | 3–6 | M2 |
+| 4 — Recommendation Engine | Size chart data model, fit prediction algorithm, confidence scoring | 5–8 | M1, M2 |
+| 5 — Frontend Integration | SnapFit upload page, recommendation widget, fit breakdown UI | 7–10 | M1 |
+| 6 — Feedback & Analytics | Feedback collection, body profile management, admin analytics | 9–12 | M2 |
+| 7 — Testing & Validation | Unit tests, integration tests, user study with 20+ subjects | 12–15 | M1, M2 |
+| 8 — Refinement & Deployment | Model tuning, performance optimisation, Docker deployment | 15–17 | M1, M2 |
+| 9 — Documentation & Submission | Final report, presentation slides, codebase documentation | 17–18 | M1, M2 |
+
+---
+
+## 12. Expected Outcomes and Evaluation Criteria
+
+### 12.1 Functional Deliverables
+
+By the end of the project the following artefacts will be produced and submitted:
+
+1. **Working E-Commerce Platform** — a fully functional clothing store with product listings, cart, order management, coupon system, and role-based admin panel.
+2. **SnapFit AI Microservice** — a standalone Python/FastAPI service exposing `/analyze` (image → measurements) and `/recommend` (measurements + size chart → recommendation) endpoints.
+3. **Integrated Frontend** — a SnapFit page allowing image upload and height entry, plus a per-product recommendation widget showing the recommended size, fit label, confidence score, and per-measurement breakdown.
+4. **Body Profile Storage** — persistent user body profiles in MongoDB, enabling instant recommendations on return visits.
+5. **Feedback Collection** — a post-purchase fit feedback form linked to the original recommendation record.
+6. **Admin Analytics** — a dashboard showing recommendation accuracy trends, return-rate correlation, and body-type distribution.
+7. **Docker Deployment** — a `docker-compose.yml` file that brings up all four services (frontend, backend, AI microservice, MongoDB) with a single command.
+
+### 12.2 Evaluation Criteria
+
+| Criterion | Measurement Method | Target |
+|---|---|---|
+| Measurement accuracy | Mean Absolute Error vs. manual tape measurements on 20+ subjects | Within acceptable tolerance per measurement |
+| Body type classification accuracy | Comparison against self-reported body type on test set | ≥ 80 % |
+| Size recommendation accuracy | Correct size confirmed by test subject post-trial | ≥ 80 % |
+| System response time | End-to-end time from image upload to recommendation display | < 3 seconds |
+| User satisfaction | Post-study questionnaire (1–5 scale) | ≥ 4 / 5 |
+| Return reduction (simulated) | % of test subjects who would have chosen the wrong size without the system | ≥ 25 % reduction |
+
+### 12.3 Academic Contribution
+
+SnapFit contributes a practical, reproducible pipeline that combines a pre-trained 2D pose estimation model with height-referenced scaling and a lightweight algebraic recommendation engine — demonstrating that meaningful body measurement extraction and size recommendation are achievable without custom model training, large proprietary datasets, or specialised hardware. The user validation study results and documented measurement error analysis constitute the primary empirical contribution of the project.
