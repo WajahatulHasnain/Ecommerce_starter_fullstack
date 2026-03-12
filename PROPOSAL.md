@@ -301,3 +301,32 @@ By the end of the project the following artefacts will be produced and submitted
 ### 12.3 Academic Contribution
 
 SnapFit contributes a practical, reproducible pipeline that combines a pre-trained 2D pose estimation model with height-referenced scaling and a lightweight algebraic recommendation engine — demonstrating that meaningful body measurement extraction and size recommendation are achievable without custom model training, large proprietary datasets, or specialised hardware. The user validation study results and documented measurement error analysis constitute the primary empirical contribution of the project.
+
+---
+
+## 13. References
+
+Mention all the literature or web references here. The references are properly numbered and correspond to their usage context throughout the proposal. Reference text is written in quotes and indented. The references are marked in [square brackets].
+
+---
+
+[1]  
+&nbsp;&nbsp;&nbsp;&nbsp;Cao, Zhe; Hidalgo, Georgios; Simon, Tomas; Wei, Shih-En; Sheikh, Yaser. "OpenPose: Realtime Multi-Person 2D Pose Estimation Using Part Affinity Fields," *IEEE Transactions on Pattern Analysis and Machine Intelligence*, vol. 43, no. 1, pp. 172–186, 2021.
+
+[2]  
+&nbsp;&nbsp;&nbsp;&nbsp;Lugaresi, Camillo; Tang, Jiuqiang; Nash, Hadon; McClanahan, Chris; Uboweja, Esha; Hays, Michael; Zhang, Fan; Chang, Chuo-Ling; Yong, Ming Guang; Lee, Juhyun; Chang, Wan-Teh; Hua, Wei; Georg, Matthias; Grundmann, Matthias. "MediaPipe: A Framework for Perceiving and Processing Reality," Third Workshop on Computer Vision for AR/VR at IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), Long Beach, CA, USA, pp. 1–4, 2019.
+
+[3]  
+&nbsp;&nbsp;&nbsp;&nbsp;Andriluka, Mykhaylo; Pishchulin, Leonid; Gehler, Peter; Schiele, Bernt. "2D Human Pose Estimation: New Benchmark and State of the Art Analysis," IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Columbus, OH, USA, pp. 3686–3693, 2014.
+
+[4]  
+&nbsp;&nbsp;&nbsp;&nbsp;Sembium, Vivek; Rastogi, Raghvendra; Tekumalla, Lavanya; Saroop, Atul. "Predicting Product Sizes Using Purchase Data," 11th ACM Conference on Recommender Systems (RecSys), Como, Italy, pp. 251–255, 2017.
+
+[5]  
+&nbsp;&nbsp;&nbsp;&nbsp;Robinette, Kathleen M.; Daanen, Hein; Paquet, Eric. "The CAESAR Project: A 3-D Surface Anthropometry Survey," 2nd International Conference on 3-D Digital Imaging and Modeling (3DIM), Ottawa, Canada, pp. 380–386, 1999.
+
+[6]  
+&nbsp;&nbsp;&nbsp;&nbsp;Goodfellow, Ian; Bengio, Yoshua; Courville, Aaron. "Deep Learning". Cambridge, MA: MIT Press, 2016. pp. 326–366.
+
+[7]  
+&nbsp;&nbsp;&nbsp;&nbsp;National Retail Federation. "Consumer Returns in the Retail Industry." 2024. NRF and Appriss Retail. Last accessed March 2026. URL: https://nrf.com/research/consumer-returns-retail-industry
